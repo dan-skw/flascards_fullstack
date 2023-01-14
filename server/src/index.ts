@@ -3,7 +3,12 @@ import mongoose from "mongoose";
 
 import Deck from "./models/Deck";
 
+import { config } from "dotenv";
+config();
+
 const PORT = 5000;
+
+console.log(process.env);
 
 const app = express();
 
@@ -20,12 +25,7 @@ app.post("/decks", async (req: Request, res: Response) => {
 });
 
 mongoose.set("strictQuery", false);
-mongoose
-  .connect(
-    "mongodb+srv://flashcardsage:isTstUNwLLLo4XxW@cluster0.wgnpns4.mongodb.net/?retryWrites=true&w=majority"
-  )
-  .then(() => {
-    console.log(`Listening on port ${PORT}... \nConnected to MongoDB...`);
-
-    app.listen(PORT);
-  });
+mongoose.connect(process.env.MONGO_URL!).then(() => {
+  console.log(`Listening on port ${PORT}... \nConnected to MongoDB...`);
+  app.listen(PORT);
+});
