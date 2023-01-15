@@ -6,6 +6,7 @@ export type DeckProps = {
 };
 
 export const fetchDecks = async (): Promise<DeckProps[]> => {
-  const response = await fetch("${API_URL}");
+  const response = await fetch(`${API_URL}/decks`);
+  console.log("response: ", response);
   return response.json();
 };
