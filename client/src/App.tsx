@@ -42,10 +42,10 @@ function App() {
         <ul className="grid grid-cols-3 gap-8 w-1/2 justify-items-center">
           {decks.map((deck) => (
             <li
-              className="group w-full flex justify-center items-center text-3xl text-neutral-100 h-48 p-6 tranistion-all duration-300 hover:transition-all hover:duration-300 bg-neutral-800 border-2 border-neutral-700 hover:border-2 hover:border-neutral-500 rounded-lg shadow-lg hover:shadow-neutral-800 select-none"
+              className="group w-full flex justify-center items-center text-3xl text-neutral-100 p-6 tranistion-all duration-300 hover:transition-all hover:duration-300 bg-neutral-800 border-2 border-neutral-700 hover:border-2 hover:border-neutral-500 rounded-lg shadow-lg hover:shadow-neutral-800 select-none"
               key={deck._id}
             >
-              <p className="flex justify-center items-center h-full w-full tranistion-colors duration-300 hover:text-red-200">
+              <p className="flex justify-center items-center h-full w-full tranistion-colors duration-300 hover:text-red-200 break-all">
                 <Link to={`/decks/${deck._id}`}>{deck.title}</Link>
               </p>
               <div className="h-full flex justify-end items-start">
@@ -59,7 +59,6 @@ function App() {
             </li>
           ))}
         </ul>
-        <h1 className="text-3xl text-gray-100">{title}</h1>
         <form className="flex flex-col items-center">
           <div className="input-box flex">
             <label
