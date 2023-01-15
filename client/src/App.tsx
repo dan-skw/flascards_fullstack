@@ -5,8 +5,7 @@ import { RiCloseFill } from "react-icons/ri";
 import { createDeck } from "./api/createDeck";
 import { fetchDecks, DeckProps } from "./api/fetchDecks";
 import { deleteDeck } from "./api/deleteDeck";
-import { createPortal, render } from "react-dom";
-//
+
 function App() {
   const [title, setTitle] = useState<string>("");
   const [decks, setDecks] = useState<DeckProps[]>([]);
