@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { RiCloseFill } from "react-icons/ri";
+import { useParams, Link } from "react-router-dom";
+import { RiCloseFill, RiArrowLeftCircleFill } from "react-icons/ri";
 
 import { fetchDeck } from "./api/fetchDeck";
 import { createCard } from "./api/createCard";
@@ -11,7 +11,6 @@ export const Deck = () => {
   const [text, setText] = useState<string>("");
   const [cards, setCards] = useState<string[]>([]);
   const [deck, setDeck] = useState<DeckProps | undefined>();
-  const [isInvalid, setIsInvalid] = useState<boolean>(false);
   const { deckId } = useParams();
 
   const handleCreateClick = async (e: React.FormEvent<HTMLButtonElement>) => {
@@ -44,15 +43,20 @@ export const Deck = () => {
 
   return (
     <div className="h-screen">
+      <Link to="/" className="text-white absolute top-1/2 ml-6">
+        <button>
+          <RiArrowLeftCircleFill className="h-10 w-10 fill-neutral-600 hover:fill-neutral-300 transition-colors duration-300  " />
+        </button>
+      </Link>
       <main className="h-full bg-neutral-900 flex flex-col gap-8 justify-center items-center ">
         <h1 className="text-5xl text-neutral-100">{deck?.title}</h1>
         <ul className="grid grid-cols-3 gap-8 w-1/2 justify-items-center">
           {cards.map((card, index) => (
             <li
-              className="group w-full flex justify-center items-center text-3xl text-neutral-100 h-48 p-6 tranistion-all duration-300 hover:transition-all hover:duration-300 bg-neutral-800 border-2 border-neutral-700 hover:border-2 hover:border-neutral-500 rounded-lg shadow-lg hover:shadow-neutral-800 select-none"
+              className="group w-full flex justify-center items-center text-3xl text-neutral-100 p-6 tranistion-all duration-300 hover:transition-all hover:duration-300 bg-neutral-800 border-2 border-neutral-700 hover:border-2 hover:border-neutral-500 rounded-lg shadow-lg hover:shadow-neutral-800 select-none"
               key={index}
             >
-              <p className="flex justify-center items-center h-full w-full tranistion-colors duration-300 hover:text-red-200">
+              <p className="flex justify-center items-center h-full w-full tranistion-colors duration-300 hover:text-red-200 break-all">
                 {card}
               </p>
               <div className="h-full flex justify-end items-start">
@@ -60,7 +64,7 @@ export const Deck = () => {
                   className="absolute"
                   onClick={() => handleDeleteCard(index)}
                 >
-                  <RiCloseFill className="invisible group-hover:visible transition ease-in-out duration-300 hover:scale-125 hover:fill-red-500" />
+                  <RiCloseFill className="invisible group-hover:visible transition ease-in-out duration-300 hover:scale-125 hover:fill-red-500 bg-neutral-800 rounded-full hover:bg-neutral-700" />
                 </button>
               </div>
             </li>
@@ -81,6 +85,7 @@ export const Deck = () => {
                 setText(e.target.value);
               }}
               required={true}
+              maxLength={100}
             />
           </div>
           <button
