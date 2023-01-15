@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { RiCloseFill } from "react-icons/ri";
 
 type DeckProps = {
   _id: string;
@@ -9,9 +10,9 @@ function App() {
   const [title, setTitle] = useState<string>("");
   const [decks, setDecks] = useState<DeckProps>([]);
 
-  const handleCreateClick = (e: React.FormEvent<HTMLButtonElement>) => {
+  const handleCreateClick = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    fetch("http://localhost:5000/decks", {
+    const response = await fetch("http://localhost:5000/decks", {
       method: "POST",
       body: JSON.stringify({ title }),
       headers: {
@@ -20,6 +21,22 @@ function App() {
     }).catch((err) => {
       console.error(`Error: ${err}`);
     });
+
+    if (response) {
+      const deck = await response.json();
+      setDecks([...decks, deck]);
+    }
+    setTitle("");
+  };
+
+  const handleDeleteDeck = (id: string) => {
+    fetch(`http://localhost:5000/decks/${id}`, {
+      method: "DELETE",
+    }).catch((err) => {
+      console.error(`Error: ${err}`);
+    });
+
+    setDecks((prevDecks) => prevDecks.filter((deck) => deck._id !== id));
   };
 
   useEffect(() => {
@@ -27,7 +44,6 @@ function App() {
       await fetch("http://localhost:5000/decks")
         .then(async (res) => {
           const data = await res.json();
-          console.log(data);
           setDecks(data);
         })
         .catch((err) => {
@@ -46,10 +62,20 @@ function App() {
         <ul className="grid grid-cols-3 gap-8 w-1/2 justify-items-center">
           {decks.map((deck) => (
             <li
-              className="flex justify-center items-center text-3xl text-neutral-100 h-48 p-6 w-full tranistion-all duration-300 hover:transition-all hover:duration-300 bg-neutral-800 border-2 border-neutral-700 hover:border-2 hover:border-neutral-500 rounded-lg shadow-lg hover:shadow-neutral-800 select-none"
+              className="group w-full flex justify-center items-center text-3xl text-neutral-100 h-48 p-6 tranistion-all duration-300 hover:transition-all hover:duration-300 bg-neutral-800 border-2 border-neutral-700 hover:border-2 hover:border-neutral-500 rounded-lg shadow-lg hover:shadow-neutral-800 select-none"
               key={deck._id}
             >
-              {deck.title}
+              <p className="flex justify-center items-center h-full w-full">
+                {deck.title}
+              </p>
+              <div className="h-full flex justify-end items-start">
+                <button
+                  className="absolute"
+                  onClick={() => handleDeleteDeck(deck._id)}
+                >
+                  <RiCloseFill className="invisible group-hover:visible transition ease-in-out duration-300 hover:scale-125 hover:fill-red-500" />
+                </button>
+              </div>
             </li>
           ))}
         </ul>
