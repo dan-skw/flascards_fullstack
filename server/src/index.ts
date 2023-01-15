@@ -26,6 +26,13 @@ app.post("/decks", async (req: Request, res: Response) => {
   res.send(createdDeck);
 });
 
+app.delete("/decks/:deckid", async (req: Request, res: Response) => {
+  const deckId = req.params.deckid;
+  const deck = await Deck.findByIdAndDelete(deckId);
+
+  res.json(deck);
+});
+
 mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.MONGO_URL!)
