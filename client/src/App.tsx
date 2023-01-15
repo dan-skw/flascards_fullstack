@@ -5,6 +5,7 @@ import { RiCloseFill } from "react-icons/ri";
 import { createDeck } from "./api/createDeck";
 import { fetchDecks, DeckProps } from "./api/fetchDecks";
 import { deleteDeck } from "./api/deleteDeck";
+import { createPortal, render } from "react-dom";
 
 function App() {
   const [title, setTitle] = useState<string>("");
@@ -13,9 +14,11 @@ function App() {
   const handleCreateClick = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const deck = await createDeck(title);
-    if (deck) {
-      setDecks([...decks, deck]);
+    if (title) {
+      const deck = await createDeck(title);
+      if (deck) {
+        setDecks([...decks, deck]);
+      }
     }
     setTitle("");
   };
@@ -35,8 +38,8 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <main className="h-screen bg-neutral-900 flex flex-col gap-8 justify-center items-center ">
+    <div className="App h-screen">
+      <main className="h-full bg-neutral-900 flex flex-col gap-8 justify-center items-center ">
         <ul className="grid grid-cols-3 gap-8 w-1/2 justify-items-center">
           {decks.map((deck) => (
             <li
@@ -59,7 +62,7 @@ function App() {
         </ul>
         <h1 className="text-3xl text-gray-100">{title}</h1>
         <form className="flex flex-col items-center">
-          <div className="flex">
+          <div className="input-box flex">
             <label
               htmlFor="deck-title"
               className="text-3xl text-slate-200 mx-2"
@@ -75,6 +78,7 @@ function App() {
               onChange={(e: React.ChangeEvent) => {
                 setTitle((e.target as HTMLInputElement).value);
               }}
+              required={true}
             />
           </div>
           <button
