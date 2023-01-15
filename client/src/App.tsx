@@ -1,59 +1,37 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { RiCloseFill } from "react-icons/ri";
 
-type DeckProps = {
-  _id: string;
-  title: string;
-}[];
+import { createDeck } from "./api/createDeck";
+import { fetchDecks, DeckProps } from "./api/fetchDecks";
+import { deleteDeck } from "./api/deleteDeck";
 
 function App() {
   const [title, setTitle] = useState<string>("");
-  const [decks, setDecks] = useState<DeckProps>([]);
+  const [decks, setDecks] = useState<DeckProps[]>([]);
 
   const handleCreateClick = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/decks", {
-      method: "POST",
-      body: JSON.stringify({ title }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).catch((err) => {
-      console.error(`Error: ${err}`);
-    });
 
-    if (response) {
-      const deck = await response.json();
+    const deck = await createDeck(title);
+    if (deck) {
       setDecks([...decks, deck]);
     }
     setTitle("");
   };
 
   const handleDeleteDeck = (id: string) => {
-    fetch(`http://localhost:5000/decks/${id}`, {
-      method: "DELETE",
-    }).catch((err) => {
-      console.error(`Error: ${err}`);
-    });
-
+    deleteDeck(id);
     setDecks((prevDecks) => prevDecks.filter((deck) => deck._id !== id));
   };
 
   useEffect(() => {
-    const fetchDecks = async () => {
-      await fetch("http://localhost:5000/decks")
-        .then(async (res) => {
-          const data = await res.json();
-          setDecks(data);
-        })
-        .catch((err) => {
-          throw new Error(
-            `Network response was not ok. ${err.status} : ${err.statusText}`
-          );
-        });
+    const getDecks = async () => {
+      const decksFromServer = await fetchDecks();
+      setDecks(decksFromServer);
     };
 
-    fetchDecks();
+    getDecks();
   }, []);
 
   return (
@@ -65,8 +43,8 @@ function App() {
               className="group w-full flex justify-center items-center text-3xl text-neutral-100 h-48 p-6 tranistion-all duration-300 hover:transition-all hover:duration-300 bg-neutral-800 border-2 border-neutral-700 hover:border-2 hover:border-neutral-500 rounded-lg shadow-lg hover:shadow-neutral-800 select-none"
               key={deck._id}
             >
-              <p className="flex justify-center items-center h-full w-full">
-                {deck.title}
+              <p className="flex justify-center items-center h-full w-full tranistion-colors duration-300 hover:text-red-200">
+                <Link to={`/decks/${deck._id}`}>{deck.title}</Link>
               </p>
               <div className="h-full flex justify-end items-start">
                 <button
