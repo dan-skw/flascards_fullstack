@@ -6,7 +6,7 @@ import { createDeck } from "./api/createDeck";
 import { fetchDecks, DeckProps } from "./api/fetchDecks";
 import { deleteDeck } from "./api/deleteDeck";
 import { createPortal, render } from "react-dom";
-//
+
 function App() {
   const [title, setTitle] = useState<string>("");
   const [decks, setDecks] = useState<DeckProps[]>([]);
@@ -60,7 +60,6 @@ function App() {
             </li>
           ))}
         </ul>
-        <h1 className="text-3xl text-gray-100">{title}</h1>
         <form className="flex flex-col items-center">
           <div className="input-box flex">
             <label
