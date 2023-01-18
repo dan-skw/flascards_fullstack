@@ -3,6 +3,7 @@ import { API_URL } from "./config";
 export type DeckProps = {
   _id: string;
   title: string;
+  color: string;
   cards: string[];
 };
 
